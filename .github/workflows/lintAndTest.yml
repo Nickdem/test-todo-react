@@ -1,0 +1,42 @@
+name: lint, test and deploy
+run-name: ${{ github.actor }} pushes changes to the ${{ github.ref_name }}.
+on:
+  push:
+    branches:
+      - "main"
+      - "!gh-pages"
+permissions:
+  contents: write
+jobs:
+  lint:
+    name: lint and test project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "22.15.0"
+      - name: install dependencies
+        run: npm ci
+      - name: runing lint
+        run: npm run lint
+      - name: running tests
+        run: npm run test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: lint
+    if: github.ref == 'refs/heads/main'
+    name: build and deploy project
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.12.1"
+      - name: install dependencies
+        run: npm ci
+      - name: build project
+        run: npm run build
+      - name: deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
