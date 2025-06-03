@@ -22,7 +22,6 @@ describe('App component', () => {
     const taskText = screen.getByTestId('todo-title-1')
     const taskText1 = screen.getByTestId('todo-title-2')
     const taskText2 = screen.getByTestId('todo-title-3')
-    console.log(taskText1)
     expect(taskText).toHaveStyle('text-decoration: line-through')
     expect(taskText1).toHaveStyle('text-decoration: none')
     expect(taskText2).toHaveStyle('text-decoration: line-through')
